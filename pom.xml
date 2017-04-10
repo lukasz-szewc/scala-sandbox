@@ -58,7 +58,8 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>report</goal> <!-- or integration-check -->
+                            <goal>check</goal>
+                            <goal>report</goal>
                         </goals>
                         <phase>prepare-package</phase> <!-- or any other phase -->
                     </execution>

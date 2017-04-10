@@ -13,7 +13,9 @@ class AppTest {
   @Test
   def testKO() = {
     val x: List[String] = "ABC" :: "ADE" :: "DEF" :: Nil
-    val foo: String = App.foo(x.toArray)
+    val toArray: Array[String] = x.toArray
+    val foo: String = App.foo(toArray)
+    val main: Unit = App.main(toArray)
     println(foo)
   }
 

@@ -30,4 +30,16 @@ class TraversableSubcollectionsTest {
     assertEquals(List(), list.tail.tail.tail)
   }
 
+  @Test
+  def sliceTraversableTest() = {
+    //given
+    val list: Traversable[String] = Traversable("a", "b", "c", "d", "e")
+
+    //when + then
+    assertEquals(Traversable("a", "b", "c", "d", "e"), list.slice(0, 5))
+    assertEquals(Traversable("b", "c", "d"), list.slice(1, 4))
+    assertEquals(Traversable("c"), list.slice(2, 3))
+    assertEquals(Traversable(), list.slice(2, 2))
+  }
+
 }

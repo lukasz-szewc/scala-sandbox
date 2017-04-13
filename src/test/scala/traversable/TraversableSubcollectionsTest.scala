@@ -3,7 +3,7 @@ package traversable
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class TraversableSubcollectionsTesst {
+class TraversableSubcollectionsTest {
 
   @Test(expected = classOf[UnsupportedOperationException])
   def nilTraversableTail() = {

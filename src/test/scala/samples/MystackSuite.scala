@@ -13,6 +13,6 @@ class MystackSuite extends Assertions {
     stack.push(2)
     assert(stack.pop() === 2)
     assert(stack.pop() === 1)
-    assert(stack.isEmpty === false)
+    assert(stack.isEmpty === true)
   }
 }

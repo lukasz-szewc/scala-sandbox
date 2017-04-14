@@ -13,4 +13,8 @@ class MyStack {
     stack.push(i)
   }
 
+  def isEmpty = {
+    stack.isEmpty
+  }
+
 }

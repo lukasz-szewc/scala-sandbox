@@ -3,7 +3,6 @@ package traversable
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 
 class TraversableCopyTest {

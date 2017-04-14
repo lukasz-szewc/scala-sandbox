@@ -29,4 +29,23 @@ class TraversableSpecificFoldTest {
     assertEquals(120, product)
   }
 
+  @Test
+  def minMaxTraversableTest() = {
+    //given
+    val traversable: Traversable[Int] = Traversable(9, 6, 7, 3)
+
+    //when + then
+    assertEquals(3, traversable.min)
+    assertEquals(9, traversable.max)
+  }
+
+  @Test
+  def minByMaxTraversableTest() = {
+    //given
+    val traversable: Traversable[Int] = Traversable(-2, -1, 0, 1, 2)
+
+    //when + then
+    assertEquals(0, traversable.minBy((f: Int) => Math.abs(f)))
+  }
+
 }

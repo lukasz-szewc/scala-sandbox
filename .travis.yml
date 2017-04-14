@@ -7,4 +7,6 @@ script:
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   - ls -al target
-  - mvn com.gavinmogan:codacy-maven-plugin:coverage -DcoverageReportFile=target/cobertura.xml
+  - sudo apt-get install jq
+  - wget -O ~/codacy-coverage-reporter-assembly-latest.jar $(curl https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r .assets[0].browser_download_url)
+  - java -cp ~/codacy-coverage-reporter-assembly-latest.jar com.codacy.CodacyCoverageReporter -l Scala -r target/cobertura.xml

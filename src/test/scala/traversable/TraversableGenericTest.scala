@@ -69,31 +69,6 @@ class TraversableGenericTest {
   }
 
   @Test
-  def iteratorTests() = {
-    //given
-    val strings: List[String] = List("a", "b", "c")
-
-    //when + then
-    assertTrue(strings.iterator.contains("a"))
-    assertFalse(strings.iterator.contains("z"))
-    assertTrue(strings.iterator.exists((x: String) => x.equals("b")))
-    assertFalse(strings.iterator.exists((x: String) => x.eq("Z")))
-
-  }
-
-  @Test
-  def reverseIteratorTests() = {
-    //given
-    val strings = List("a", "b", "c").reverseIterator
-
-    //when + then
-    assertEquals("c", strings.next())
-    assertEquals("b", strings.next())
-    assertEquals("a", strings.next())
-    assertEquals(false, strings.hasNext)
-  }
-
-  @Test
   def headAndTailsTest() = {
     //given
     val list: Traversable[String] = List("a", "b", "c")
@@ -115,32 +90,6 @@ class TraversableGenericTest {
     assertEquals(List("a"), list.take(1))
     assertEquals(List("a", "b"), list.take(2))
     assertEquals(List("a", "b", "c"), list.take(3))
-  }
-
-  @Test
-  def findMethodExample() = {
-    //given
-    val list: Traversable[String] = List("a", "b", "c")
-    val existElement = (x: String) => x.length == 1
-    val doesNotExistElement = (x: String) => x.length == 100
-
-    //when + then
-    assertEquals("notThere", list.find(doesNotExistElement).getOrElse("notThere"))
-    assertEquals("a", list.find(existElement).get)
-    assertEquals("c", list.toList.reverseIterator.find(existElement).get)
-  }
-
-  @Test
-  def groupByExample() = {
-    //given
-    val list: Traversable[String] = List("a", "b", "c")
-
-    //when
-    val map: Map[Int, Traversable[String]] = list.groupBy((f: String) => f.length)
-
-    //then
-    assertEquals(1, map.size)
-    assertEquals(list, map.get(1).get)
   }
 
 }

@@ -1,5 +1,7 @@
 package pattern
 
+import java.time.OffsetDateTime
+
 import org.hamcrest.CoreMatchers.is
 import org.junit.Assert.assertThat
 import org.junit.Assert.assertEquals
@@ -42,5 +44,19 @@ class SimplePatternMatchingTest {
     val value = SimplePatternMatching.giveMeSubstitution("text", 't')
 
     assertEquals(value, "ttext")
+  }
+
+  @Test def caseClassPatternMatching() = {
+    val boss: Boss = Boss(1000)
+    val employee: Employee = Employee(400, OffsetDateTime.now())
+    
+    assertEquals(salary(boss) - salary(employee), 1600, 0.000001d)
+  }
+
+  def salary(person: Person) = {
+    person match {
+      case Boss(salary) => salary * 2
+      case Employee(salary, _) => salary
+    }
   }
 }

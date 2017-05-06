@@ -1,5 +1,3 @@
 package pattern
 
-abstract class Person {
-
-}
+abstract class Person

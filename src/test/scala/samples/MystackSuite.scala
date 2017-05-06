@@ -15,4 +15,15 @@ class MystackSuite extends Assertions {
     assert(stack.pop() === 1)
     assert(stack.isEmpty === true)
   }
+  
+  @Test def stackCanBePrinted(): Unit = {
+    val stack: MyStack = new MyStack
+    
+    stack.push(1)
+    stack.push(2)
+    stack.pop()
+    stack.push(3)
+    
+    stack.print()
+  }
 }

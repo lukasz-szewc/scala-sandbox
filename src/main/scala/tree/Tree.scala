@@ -12,19 +12,21 @@ class Tree(private var root: Option[Node] = Option.empty) {
   }
 
   def addNode(node: Node, candidate: Node): Unit = {
+    var nextNodeToCheck: Option[Node] = node.left
     if (node.nodeValue <= candidate.nodeValue) {
       if (node.right == Option.empty) {
         node.assignNodeRight(candidate)
+        return
       } else {
-        addNode(node.right.get, candidate)
+        nextNodeToCheck = node.right
       }
     } else {
       if (node.left == Option.empty) {
-        node.assignNodeLeft(candidate)
-      } else {
-        addNode(node.left.get, candidate)
+        node.assignNodeLeftIfEmpty(candidate)
+        return
       }
     }
+    addNode(nextNodeToCheck.get, candidate)
   }
   
   override def toString = s"Tree($root)"

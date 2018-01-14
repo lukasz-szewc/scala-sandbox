@@ -1,7 +1,8 @@
 package tree
 
-class Tree(private var root: Option[Node] = Option.empty) {
+import scala.util.Random
 
+class Tree(private var root: Option[Node] = Option.empty) {
   def add(number: Int): Unit = {
     val candidate: Node = new Node(number)
     if (root == Option.empty) {
@@ -10,6 +11,7 @@ class Tree(private var root: Option[Node] = Option.empty) {
       addNode(root.get, candidate)
     }
   }
+
 
   def addNode(node: Node, candidate: Node): Unit = {
     var nextNodeToCheck: Option[Node] = node.left
@@ -53,6 +55,22 @@ class Tree(private var root: Option[Node] = Option.empty) {
     findNumber(numberToFind, root.get)
   }
 
+
+  def traverseTree(): Int = {
+    if (root == Option.empty) {
+      return 0
+    }
+    visitNode(root.get, 1)
+  }
+
+  def visitNode(node: Node, acc: Int): Int = {
+    if (node == null) {
+      return acc
+    }
+    val leftValue: Int = visitNode(node.left.orNull, if (node.left != Option.empty) acc + 1 else acc)
+    visitNode(node.right.orNull, if (node.right != Option.empty) leftValue + 1 else leftValue)
+  }
+  
   override def toString = s"Tree($root)"
 }
 
@@ -74,5 +92,21 @@ object Tree{
     println(someTree.find(61))
     println(someTree.find(0))
 
+    println(new Tree().traverseTree())
+    println(new Tree(Some(new Node(10))).traverseTree())
+    val tree: Tree = new Tree()
+    tree.add(1)
+    tree.add(10)
+    tree.add(12)
+    tree.add(33)
+    println(tree.traverseTree())
+    println(someTree.traverseTree())
+
+    val anotherTree: Tree = new Tree()
+    val random: Random = new Random()
+    for (x <- 1 to 10000 ) {
+      anotherTree.add(random.nextInt(100000))
+    }
+    println(anotherTree.traverseTree())
   }
 }

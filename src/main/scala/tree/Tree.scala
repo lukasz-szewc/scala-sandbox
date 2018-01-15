@@ -34,20 +34,17 @@ class Tree(private var root: Option[Node] = Option.empty) {
 
   @tailrec
   private def findNumber(numberToFind: Int, node: Node): Option[Node] = {
-    var nextNodeCandidate: Option[Node] = node.left
-    if (node.nodeValue == numberToFind) {
+    if (node == null) {
+      return Option.empty
+    } else if (node.nodeValue == numberToFind) {
       return Some(node)
-    } else if (node.nodeValue <= numberToFind) {
-      if (node.right == Option.empty) {
-        return Option.empty
-      }
-      nextNodeCandidate = node.right
-    } else {
-      if (node.left == Option.empty) {
-        return Option.empty
-      }
     }
-    findNumber(numberToFind, nextNodeCandidate.get)
+
+    findNumber(numberToFind, candidate(numberToFind, node).orNull)
+  }
+
+  private def candidate(numberToFind: Int, node: Node) = {
+    if (node.nodeValue <= numberToFind) node.right else node.left
   }
 
   def find(numberToFind: Int): Option[Node] = {

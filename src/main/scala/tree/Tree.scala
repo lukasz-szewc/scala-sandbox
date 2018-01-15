@@ -33,26 +33,26 @@ class Tree(private var root: Option[Node] = Option.empty) {
   }
 
   @tailrec
-  private def findNumber(numberToFind: Int, node: Node): Boolean = {
+  private def findNumber(numberToFind: Int, node: Node): Option[Node] = {
     var nextNodeCandidate: Option[Node] = node.left
     if (node.nodeValue == numberToFind) {
-      return true
+      return Some(node)
     } else if (node.nodeValue <= numberToFind) {
       if (node.right == Option.empty) {
-        return false
+        return Option.empty
       }
       nextNodeCandidate = node.right
     } else {
       if (node.left == Option.empty) {
-        return false
+        return Option.empty
       }
     }
     findNumber(numberToFind, nextNodeCandidate.get)
   }
 
-  def find(numberToFind: Int): Boolean = {
+  def find(numberToFind: Int): Option[Node] = {
     if (root == Option.empty) {
-      return false
+      return Option.empty
     }
     findNumber(numberToFind, root.get)
   }

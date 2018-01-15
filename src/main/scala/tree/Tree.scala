@@ -2,7 +2,6 @@ package tree
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
-import scala.util.Random
 
 class Tree(private var root: Option[Node] = Option.empty) {
   def add(number: Int): Unit = {
@@ -67,11 +66,11 @@ class Tree(private var root: Option[Node] = Option.empty) {
     ints += node.nodeValue
   }
 
-  def postOrderTraverseTree(): ListBuffer[Int] = {
+  def traversePostOrder(): ListBuffer[Int] = {
     postOrderTraverse(root.orNull, new ListBuffer[Int])
   }
 
-  def preOrderTraverseTree(): ListBuffer[Int] = {
+  def traversePreOrder(): ListBuffer[Int] = {
     preOrderTraverse(root.orNull, new ListBuffer[Int])
   }
 
@@ -84,7 +83,7 @@ class Tree(private var root: Option[Node] = Option.empty) {
     preOrderTraverse(node.right.orNull, ints)
   }
 
-  def inOrderTraverseTree(): ListBuffer[Int] = {
+  def traverseInOrder(): ListBuffer[Int] = {
     inOrderTraverse(root.orNull, new ListBuffer[Int])
   }
 
@@ -98,7 +97,7 @@ class Tree(private var root: Option[Node] = Option.empty) {
     inOrderTraverse(node.right.orNull, ints)
   }
 
-  def traverseTree(): Int = {
+  def traverseAndCount(): Int = {
     if (root == Option.empty) {
       return 0
     }

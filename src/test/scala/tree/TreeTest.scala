@@ -11,7 +11,7 @@ class TreeTest {
     val tree: Tree = new Tree()
 
     //when
-    val nodesVisited: Int = tree.traverseTree()
+    val nodesVisited: Int = tree.traverseAndCount()
 
     //then
     assertEquals(0, nodesVisited)
@@ -23,19 +23,19 @@ class TreeTest {
     val tree: Tree = new Tree(new Some[Node](new Node(50)))
 
     //when
-    val nodesVisited: Int = tree.traverseTree()
+    val nodesVisited: Int = tree.traverseAndCount()
 
     //then
     assertEquals(1, nodesVisited)
   }
-  
+
   @Test
   def threeElementTreeTraverseTest(): Unit = {
     //given
     val tree: Tree = complexBalancedTree
 
     //when
-    val nodesVisited: Int = tree.traverseTree()
+    val nodesVisited: Int = tree.traverseAndCount()
 
     //then
     assertEquals(7, nodesVisited)
@@ -84,7 +84,7 @@ class TreeTest {
     val tree: Tree = complexBalancedTree
 
     //when
-    val ints = tree.inOrderTraverseTree()
+    val ints = tree.traverseInOrder()
 
     //then
     assertEquals(List(10, 20, 30, 50, 70, 80 , 90), ints.toList)
@@ -96,7 +96,7 @@ class TreeTest {
     val tree: Tree = new Tree()
 
     //when
-    val ints = tree.inOrderTraverseTree()
+    val ints = tree.traverseInOrder()
 
     //then
     assertEquals(List(), ints.toList)
@@ -108,7 +108,7 @@ class TreeTest {
     val tree: Tree = complexBalancedTree
 
     //when
-    val ints = tree.preOrderTraverseTree()
+    val ints = tree.traversePreOrder()
 
     //then
     assertEquals(List(50, 20, 10, 30, 80, 70 , 90), ints.toList)
@@ -120,7 +120,7 @@ class TreeTest {
     val tree: Tree = new Tree()
 
     //when
-    val ints = tree.preOrderTraverseTree()
+    val ints = tree.traversePreOrder()
 
     //then
     assertEquals(List(), ints.toList)
@@ -132,7 +132,7 @@ class TreeTest {
     val tree: Tree = complexBalancedTree
 
     //when
-    val ints = tree.postOrderTraverseTree()
+    val ints = tree.traversePostOrder()
 
     //then
     assertEquals(List(10, 30, 20, 70, 90, 80 , 50), ints.toList)
@@ -144,7 +144,7 @@ class TreeTest {
     val tree: Tree = new Tree()
 
     //when
-    val ints = tree.postOrderTraverseTree()
+    val ints = tree.traversePostOrder()
 
     //then
     assertEquals(List(), ints.toList)

@@ -2,7 +2,6 @@ package tree
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
-import scala.util.Random
 
 class Tree(private var root: Option[Node] = Option.empty) {
   def add(number: Int): Unit = {
@@ -67,11 +66,11 @@ class Tree(private var root: Option[Node] = Option.empty) {
     ints += node.nodeValue
   }
 
-  def postOrderTraverseTree(): ListBuffer[Int] = {
+  def traversePostOrder(): ListBuffer[Int] = {
     postOrderTraverse(root.orNull, new ListBuffer[Int])
   }
 
-  def preOrderTraverseTree(): ListBuffer[Int] = {
+  def traversePreOrder(): ListBuffer[Int] = {
     preOrderTraverse(root.orNull, new ListBuffer[Int])
   }
 
@@ -84,7 +83,7 @@ class Tree(private var root: Option[Node] = Option.empty) {
     preOrderTraverse(node.right.orNull, ints)
   }
 
-  def inOrderTraverseTree(): ListBuffer[Int] = {
+  def traverseInOrder(): ListBuffer[Int] = {
     inOrderTraverse(root.orNull, new ListBuffer[Int])
   }
 
@@ -98,7 +97,7 @@ class Tree(private var root: Option[Node] = Option.empty) {
     inOrderTraverse(node.right.orNull, ints)
   }
 
-  def traverseTree(): Int = {
+  def traverseAndCount(): Int = {
     if (root == Option.empty) {
       return 0
     }
@@ -114,41 +113,4 @@ class Tree(private var root: Option[Node] = Option.empty) {
   }
 
   override def toString = s"Tree($root)"
-}
-
-object Tree{
-  def main(args: Array[String]): Unit = {
-
-    val someTree: Tree = new Tree()
-    someTree.add(50)
-    someTree.add(80)
-    someTree.add(20)
-    someTree.add(20)
-    someTree.add(60)
-    println("Hello, world! " + someTree)
-
-    println(someTree.find(50))
-    println(someTree.find(80))
-    println(someTree.find(20))
-    println(someTree.find(60))
-    println(someTree.find(61))
-    println(someTree.find(0))
-
-    println(new Tree().traverseTree())
-    println(new Tree(Some(new Node(10))).traverseTree())
-    val tree: Tree = new Tree()
-    tree.add(1)
-    tree.add(10)
-    tree.add(12)
-    tree.add(33)
-    println(tree.traverseTree())
-    println(someTree.traverseTree())
-
-    val anotherTree: Tree = new Tree()
-    val random: Random = new Random()
-    for (x <- 1 to 10000 ) {
-      anotherTree.add(random.nextInt(100000))
-    }
-    println(anotherTree.traverseTree())
-  }
 }

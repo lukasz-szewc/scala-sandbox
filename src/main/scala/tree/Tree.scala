@@ -1,5 +1,7 @@
 package tree
 
+import scala.annotation.tailrec
+import scala.collection.mutable.ListBuffer
 import scala.util.Random
 
 class Tree(private var root: Option[Node] = Option.empty) {
@@ -12,8 +14,8 @@ class Tree(private var root: Option[Node] = Option.empty) {
     }
   }
 
-
-  def addNode(node: Node, candidate: Node): Unit = {
+  @tailrec
+  private def addNode(node: Node, candidate: Node): Unit = {
     var nextNodeToCheck: Option[Node] = node.left
     if (node.nodeValue <= candidate.nodeValue) {
       if (node.right == Option.empty) {
@@ -31,7 +33,8 @@ class Tree(private var root: Option[Node] = Option.empty) {
     addNode(nextNodeToCheck.get, candidate)
   }
 
-  def findNumber(numberToFind: Int, node: Node): Boolean = {
+  @tailrec
+  private def findNumber(numberToFind: Int, node: Node): Boolean = {
     var nextNodeCandidate: Option[Node] = node.left
     if (node.nodeValue == numberToFind) {
       return true
@@ -55,6 +58,45 @@ class Tree(private var root: Option[Node] = Option.empty) {
     findNumber(numberToFind, root.get)
   }
 
+  def postOrderTraverse(node: Node, ints: ListBuffer[Int]): ListBuffer[Int] = {
+    if(node == null) {
+      return ints
+    }
+    postOrderTraverse(node.left.orNull, ints)
+    postOrderTraverse(node.right.orNull, ints)
+    ints += node.nodeValue
+  }
+
+  def postOrderTraverseTree(): ListBuffer[Int] = {
+    postOrderTraverse(root.orNull, new ListBuffer[Int])
+  }
+
+  def preOrderTraverseTree(): ListBuffer[Int] = {
+    preOrderTraverse(root.orNull, new ListBuffer[Int])
+  }
+
+  def preOrderTraverse(node: Node, ints: ListBuffer[Int]): ListBuffer[Int] = {
+    if(node == null) {
+      return ints
+    }
+    ints += node.nodeValue
+    preOrderTraverse(node.left.orNull, ints)
+    preOrderTraverse(node.right.orNull, ints)
+  }
+
+  def inOrderTraverseTree(): ListBuffer[Int] = {
+    inOrderTraverse(root.orNull, new ListBuffer[Int])
+  }
+
+  def inOrderTraverse(node: Node, ints: ListBuffer[Int]): ListBuffer[Int] = {
+    if (node == null) {
+      return ints
+    }
+
+    inOrderTraverse(node.left.orNull, ints)
+    ints += node.nodeValue
+    inOrderTraverse(node.right.orNull, ints)
+  }
 
   def traverseTree(): Int = {
     if (root == Option.empty) {
@@ -70,7 +112,7 @@ class Tree(private var root: Option[Node] = Option.empty) {
     val leftValue: Int = visitNode(node.left.orNull, if (node.left != Option.empty) acc + 1 else acc)
     visitNode(node.right.orNull, if (node.right != Option.empty) leftValue + 1 else leftValue)
   }
-  
+
   override def toString = s"Tree($root)"
 }
 

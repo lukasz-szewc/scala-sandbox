@@ -48,10 +48,10 @@ class Tree(private var root: Option[Node] = Option.empty) {
   }
 
   def find(numberToFind: Int): Option[Node] = {
-    if (root == Option.empty) {
-      return Option.empty
+    root match {
+      case None => Option.empty
+      case Some(_) => findNumber(numberToFind, root.get)
     }
-    findNumber(numberToFind, root.get)
   }
 
   def postOrderTraverse(node: Node, ints: ListBuffer[Int]): ListBuffer[Int] = {
@@ -72,12 +72,15 @@ class Tree(private var root: Option[Node] = Option.empty) {
   }
 
   def preOrderTraverse(node: Node, ints: ListBuffer[Int]): ListBuffer[Int] = {
-    if(node == null) {
-      return ints
+    def actualPreOrderTraversal: ListBuffer[Int] = {
+      ints += node.nodeValue
+      preOrderTraverse(node.left.orNull, ints)
+      preOrderTraverse(node.right.orNull, ints)
     }
-    ints += node.nodeValue
-    preOrderTraverse(node.left.orNull, ints)
-    preOrderTraverse(node.right.orNull, ints)
+    node match {
+      case null => ints
+      case _ => actualPreOrderTraversal
+    }
   }
 
   def traverseInOrder(): ListBuffer[Int] = {
@@ -95,10 +98,10 @@ class Tree(private var root: Option[Node] = Option.empty) {
   }
 
   def traverseAndCount(): Int = {
-    if (root == Option.empty) {
-      return 0
+    root match {
+      case None => 0
+      case Some(_) => visitNode(root.get, 1)
     }
-    visitNode(root.get, 1)
   }
 
   def visitNode(node: Node, acc: Int): Int = {

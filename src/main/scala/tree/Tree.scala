@@ -33,18 +33,24 @@ class Tree(private var root: Option[Node] = Option.empty) {
   }
 
   @tailrec
-  private def findNumber(numberToFind: Int, node: Node): Option[Node] = {
+  private def yetAnotherFindNumberMethod(numberToFind: Int, node: Node): Option[Node] = {
     def candidate = {
       if (node.nodeValue <= numberToFind) node.right else node.left
     }
 
-    if (node == null) {
-      return Option.empty
-    }
+    def safeValueOfNode = if (node != null) node.nodeValue else null
 
-    node.nodeValue match {
+    safeValueOfNode match {
+      case null => None
       case `numberToFind` => Some(node)
-      case _ => findNumber(numberToFind, candidate.orNull)
+      case _ => yetAnotherFindNumberMethod(numberToFind, candidate.orNull)
+    }
+  }
+
+  private def findNumber(numberToFind: Int, node: Node): Option[Node] = {
+    node match {
+      case null => None
+      case _ => yetAnotherFindNumberMethod(numberToFind, node)
     }
   }
 
@@ -56,12 +62,16 @@ class Tree(private var root: Option[Node] = Option.empty) {
   }
 
   def postOrderTraverse(node: Node, ints: ListBuffer[Int]): ListBuffer[Int] = {
-    if(node == null) {
-      return ints
+    def actualPostOrderTraverse = {
+      postOrderTraverse(node.left.orNull, ints)
+      postOrderTraverse(node.right.orNull, ints)
+      ints += node.nodeValue
     }
-    postOrderTraverse(node.left.orNull, ints)
-    postOrderTraverse(node.right.orNull, ints)
-    ints += node.nodeValue
+
+    node match {
+      case null => ints
+      case _ => actualPostOrderTraverse
+    }
   }
 
   def traversePostOrder(): ListBuffer[Int] = {
@@ -89,13 +99,16 @@ class Tree(private var root: Option[Node] = Option.empty) {
   }
 
   def inOrderTraverse(node: Node, ints: ListBuffer[Int]): ListBuffer[Int] = {
-    if (node == null) {
-      return ints
+    def actualInOrderTraverse = {
+      inOrderTraverse(node.left.orNull, ints)
+      ints += node.nodeValue
+      inOrderTraverse(node.right.orNull, ints)
     }
 
-    inOrderTraverse(node.left.orNull, ints)
-    ints += node.nodeValue
-    inOrderTraverse(node.right.orNull, ints)
+    node match {
+      case null => ints
+      case _ => actualInOrderTraverse
+    }
   }
 
   def traverseAndCount(): Int = {

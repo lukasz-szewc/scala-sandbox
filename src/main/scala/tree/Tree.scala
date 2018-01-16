@@ -33,7 +33,7 @@ class Tree(private var root: Option[Node] = Option.empty) {
   }
 
   @tailrec
-  private def yetAnotherFindNumberMethod(numberToFind: Int, node: Node): Option[Node] = {
+  private def findNumber(numberToFind: Int, node: Node): Option[Node] = {
     def candidate = {
       if (node.nodeValue <= numberToFind) node.right else node.left
     }
@@ -43,15 +43,39 @@ class Tree(private var root: Option[Node] = Option.empty) {
     safeValueOfNode match {
       case null => None
       case `numberToFind` => Some(node)
-      case _ => yetAnotherFindNumberMethod(numberToFind, candidate.orNull)
+      case _ => findNumber(numberToFind, candidate.orNull)
     }
   }
 
-  private def findNumber(numberToFind: Int, node: Node): Option[Node] = {
-    node match {
-      case null => None
-      case _ => yetAnotherFindNumberMethod(numberToFind, node)
+  @tailrec
+  private def findNodeWithParent(numberToFind: Int, currentNode: Node, parent: Node): (Option[Node], Option[Node]) = {
+    def candidate = {
+      if (currentNode.nodeValue <= numberToFind) currentNode.right else currentNode.left
     }
+
+    def safeValueOfNode = if (currentNode != null) currentNode.nodeValue else null
+
+    safeValueOfNode match {
+      case null => (Option.apply(parent), None)
+      case `numberToFind` => (Option.apply(parent), Some(currentNode))
+      case _ => findNodeWithParent(numberToFind, candidate.orNull, currentNode)
+    }
+  }
+
+  def removeNode(i: Int): Option[Node] = {
+    val searchResult: (Option[Node], Option[Node]) = findNodeWithParent(i, root.orNull, null)
+    val tuple: (Option[Node], Option[Int]) = (searchResult._1, searchResult._2.map(node => node.nodeValue))
+    tuple match {
+      case (None, None) => None
+      case (None, Some(`i`)) => removeRootNodeAndReturn(None)
+      case (Some(_), Some(`i`)) => tuple._1.get.remove(searchResult._2)
+    }
+  }
+
+  private def removeRootNodeAndReturn(none: Option[Node]): Option[Node] = {
+    val toReturn = this.root
+    this.root = none
+    toReturn
   }
 
   def find(numberToFind: Int): Option[Node] = {

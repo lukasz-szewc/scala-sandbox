@@ -33,37 +33,69 @@ class Tree(private var root: Option[Node] = Option.empty) {
   }
 
   @tailrec
-  private def findNumber(numberToFind: Int, node: Node): Boolean = {
-    var nextNodeCandidate: Option[Node] = node.left
-    if (node.nodeValue == numberToFind) {
-      return true
-    } else if (node.nodeValue <= numberToFind) {
-      if (node.right == Option.empty) {
-        return false
-      }
-      nextNodeCandidate = node.right
-    } else {
-      if (node.left == Option.empty) {
-        return false
-      }
+  private def findNumber(numberToFind: Int, node: Node): Option[Node] = {
+    def candidate = {
+      if (node.nodeValue <= numberToFind) node.right else node.left
     }
-    findNumber(numberToFind, nextNodeCandidate.get)
+
+    def safeValueOfNode = if (node != null) node.nodeValue else null
+
+    safeValueOfNode match {
+      case null => None
+      case `numberToFind` => Some(node)
+      case _ => findNumber(numberToFind, candidate.orNull)
+    }
   }
 
-  def find(numberToFind: Int): Boolean = {
-    if (root == Option.empty) {
-      return false
+  @tailrec
+  private def findNodeWithParent(numberToFind: Int, currentNode: Node, parent: Node): (Option[Node], Option[Node]) = {
+    def candidate = {
+      if (currentNode.nodeValue <= numberToFind) currentNode.right else currentNode.left
     }
-    findNumber(numberToFind, root.get)
+
+    def safeValueOfNode = if (currentNode != null) currentNode.nodeValue else null
+
+    safeValueOfNode match {
+      case null => (Option.apply(parent), None)
+      case `numberToFind` => (Option.apply(parent), Some(currentNode))
+      case _ => findNodeWithParent(numberToFind, candidate.orNull, currentNode)
+    }
+  }
+
+  def removeNode(i: Int): Option[Node] = {
+    val searchResult: (Option[Node], Option[Node]) = findNodeWithParent(i, root.orNull, null)
+    val tuple: (Option[Node], Option[Int]) = (searchResult._1, searchResult._2.map(node => node.nodeValue))
+    tuple match {
+      case (None, None) => None
+      case (None, Some(`i`)) => removeRootNodeAndReturn(None)
+      case (Some(_), Some(`i`)) => tuple._1.get.remove(searchResult._2)
+    }
+  }
+
+  private def removeRootNodeAndReturn(none: Option[Node]): Option[Node] = {
+    val toReturn = this.root
+    this.root = none
+    toReturn
+  }
+
+  def find(numberToFind: Int): Option[Node] = {
+    root match {
+      case None => Option.empty
+      case Some(_) => findNumber(numberToFind, root.get)
+    }
   }
 
   def postOrderTraverse(node: Node, ints: ListBuffer[Int]): ListBuffer[Int] = {
-    if(node == null) {
-      return ints
+    def actualPostOrderTraverse = {
+      postOrderTraverse(node.left.orNull, ints)
+      postOrderTraverse(node.right.orNull, ints)
+      ints += node.nodeValue
     }
-    postOrderTraverse(node.left.orNull, ints)
-    postOrderTraverse(node.right.orNull, ints)
-    ints += node.nodeValue
+
+    node match {
+      case null => ints
+      case _ => actualPostOrderTraverse
+    }
   }
 
   def traversePostOrder(): ListBuffer[Int] = {
@@ -75,12 +107,15 @@ class Tree(private var root: Option[Node] = Option.empty) {
   }
 
   def preOrderTraverse(node: Node, ints: ListBuffer[Int]): ListBuffer[Int] = {
-    if(node == null) {
-      return ints
+    def actualPreOrderTraversal: ListBuffer[Int] = {
+      ints += node.nodeValue
+      preOrderTraverse(node.left.orNull, ints)
+      preOrderTraverse(node.right.orNull, ints)
     }
-    ints += node.nodeValue
-    preOrderTraverse(node.left.orNull, ints)
-    preOrderTraverse(node.right.orNull, ints)
+    node match {
+      case null => ints
+      case _ => actualPreOrderTraversal
+    }
   }
 
   def traverseInOrder(): ListBuffer[Int] = {
@@ -88,20 +123,23 @@ class Tree(private var root: Option[Node] = Option.empty) {
   }
 
   def inOrderTraverse(node: Node, ints: ListBuffer[Int]): ListBuffer[Int] = {
-    if (node == null) {
-      return ints
+    def actualInOrderTraverse = {
+      inOrderTraverse(node.left.orNull, ints)
+      ints += node.nodeValue
+      inOrderTraverse(node.right.orNull, ints)
     }
 
-    inOrderTraverse(node.left.orNull, ints)
-    ints += node.nodeValue
-    inOrderTraverse(node.right.orNull, ints)
+    node match {
+      case null => ints
+      case _ => actualInOrderTraverse
+    }
   }
 
   def traverseAndCount(): Int = {
-    if (root == Option.empty) {
-      return 0
+    root match {
+      case None => 0
+      case Some(_) => visitNode(root.get, 1)
     }
-    visitNode(root.get, 1)
   }
 
   def visitNode(node: Node, acc: Int): Int = {

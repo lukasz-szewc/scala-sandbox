@@ -47,12 +47,12 @@ class TreeTest {
     val tree: Tree = new Tree(new Some[Node](new Node(50)))
 
     //when
-    val firstElement: Boolean = tree.find(10)
-    val secondElement: Boolean = tree.find(50)
+    val firstElement = tree.find(10)
+    val secondElement = tree.find(50)
 
     //then
-    assertEquals(false, firstElement)
-    assertEquals(true, secondElement)
+    assertEquals(false, firstElement.isDefined)
+    assertEquals(true, secondElement.isDefined)
   }
 
   @Test
@@ -61,12 +61,12 @@ class TreeTest {
     val tree: Tree = complexBalancedTree
 
     //when + then
-    assertEquals(true, tree.find(10))
-    assertEquals(true, tree.find(20))
-    assertEquals(true, tree.find(30))
-    assertEquals(true, tree.find(50))
-    assertEquals(true, tree.find(70))
-    assertEquals(true, tree.find(90))
+    assertEquals(true, tree.find(10).isDefined)
+    assertEquals(true, tree.find(20).isDefined)
+    assertEquals(true, tree.find(30).isDefined)
+    assertEquals(true, tree.find(50).isDefined)
+    assertEquals(true, tree.find(70).isDefined)
+    assertEquals(true, tree.find(90).isDefined)
   }
 
   @Test
@@ -148,6 +148,48 @@ class TreeTest {
 
     //then
     assertEquals(List(), ints.toList)
+  }
+
+  @Test
+  def removeNodeTest(): Unit = {
+    //given
+    val tree: Tree = new Tree()
+
+    //when
+    val removedNode: Option[Node] = tree.removeNode(10)
+
+    //then
+    assertEquals(removedNode, None)
+  }
+
+  @Test
+  def removeOneNodeTest(): Unit = {
+    //given
+    val someNode: Some[Node] = Some(new Node(50))
+    val tree: Tree = new Tree(someNode)
+
+    //when
+    val removedNode: Option[Node] = tree.removeNode(50)
+
+    //then
+    assertEquals(removedNode, someNode)
+    assertEquals(0, tree.traverseAndCount())
+    assertEquals(None, tree.find(50))
+  }
+
+
+  @Test
+  def removeLeafNodeTest(): Unit = {
+    //given
+    val tree: Tree = complexBalancedTree
+
+    //when
+    val removedNode: Option[Node] = tree.removeNode(90)
+
+    //then
+    assertEquals(90, removedNode.map(node => node.nodeValue).getOrElse(Int.MinValue))
+    assertEquals(6, tree.traverseAndCount())
+    assertEquals(None, tree.find(90))
   }
 
   def complexBalancedTree: Tree = {

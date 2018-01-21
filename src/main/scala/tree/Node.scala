@@ -13,5 +13,17 @@ class Node(val nodeValue: Int) {
       left = Some[Node](candidate)
     }
   }
+
+  def remove(node: Option[Node]): Option[Node] = {
+    if (node == left) {
+      val toReturn = left
+      left = None
+      toReturn
+    } else {
+      val toReturn = right
+      right = None
+      toReturn
+    }
+  }
   override def toString = s"root($nodeValue) - left($left) - right($right)"
 }

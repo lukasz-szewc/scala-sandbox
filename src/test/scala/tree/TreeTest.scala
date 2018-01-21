@@ -18,6 +18,18 @@ class TreeTest {
   }
 
   @Test
+  def addElementToEmptyTreeTest(): Unit = {
+    //given
+    val tree: Tree = new Tree()
+
+    //when
+    tree.add(60)
+
+    //then
+    assertEquals(1, tree.traverseAndCount())
+  }
+
+  @Test
   def oneElementTreeTest(): Unit = {
     //given
     val tree: Tree = new Tree(new Some[Node](new Node(50)))

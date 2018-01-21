@@ -47,34 +47,27 @@ class Tree(private var root: Option[Node] = Option.empty) {
     }
   }
 
-  @tailrec
-  private def findNodeWithParent(numberToFind: Int, currentNode: Node, parent: Node): (Option[Node], Option[Node]) = {
-    def candidate = {
-      if (currentNode.nodeValue <= numberToFind) currentNode.right else currentNode.left
-    }
-
-    def safeValueOfNode = if (currentNode != null) currentNode.nodeValue else null
-
-    safeValueOfNode match {
-      case null => (Option.apply(parent), None)
-      case `numberToFind` => (Option.apply(parent), Some(currentNode))
-      case _ => findNodeWithParent(numberToFind, candidate.orNull, currentNode)
-    }
-  }
-
   def removeNode(i: Int): Option[Node] = {
-    val searchResult: (Option[Node], Option[Node]) = findNodeWithParent(i, root.orNull, null)
-    val tuple: (Option[Node], Option[Int]) = (searchResult._1, searchResult._2.map(node => node.nodeValue))
-    tuple match {
-      case (None, None) => None
-      case (None, Some(`i`)) => removeRootNodeAndReturn(None)
-      case (Some(_), Some(`i`)) => tuple._1.get.remove(searchResult._2)
+    if (root == None) removeRootNodeAndReturn(root) else removeNode(i, root, None)
+  }
+
+  def removeNode(i: Int, node: Option[Node], root: Option[Node]): Option[Node] = {
+    def candidate = {
+      val value = node.get
+      if (value.nodeValue <= i) value.right else value.left
+    }
+
+    val maybeInt: Option[Int] = node.map(node => node.nodeValue)
+    maybeInt match {
+      case None => node
+      case Some(`i`) => if (root == Option.empty) removeRootNodeAndReturn(root) else root.get.remove(node)
+      case Some(_) => removeNode(i, candidate, node)
     }
   }
 
-  private def removeRootNodeAndReturn(none: Option[Node]): Option[Node] = {
+  private def removeRootNodeAndReturn(root: Option[Node]): Option[Node] = {
     val toReturn = this.root
-    this.root = none
+    this.root = root
     toReturn
   }
 

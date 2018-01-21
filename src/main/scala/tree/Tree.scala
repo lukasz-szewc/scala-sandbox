@@ -56,11 +56,12 @@ class Tree(private var root: Option[Node] = Option.empty) {
       val value = node.get
       if (value.nodeValue <= i) value.right else value.left
     }
-    def value = if (node != Option.empty) node.get.nodeValue else null
-    value match {
-      case null => node
-      case `i` => if (root == Option.empty) removeRootNodeAndReturn(root) else root.get.remove(node)
-      case _ => removeNode(i, candidate, node)
+
+    val maybeInt: Option[Int] = node.map(node => node.nodeValue)
+    maybeInt match {
+      case None => node
+      case Some(`i`) => if (root == Option.empty) removeRootNodeAndReturn(root) else root.get.remove(node)
+      case Some(_) => removeNode(i, candidate, node)
     }
   }
 
